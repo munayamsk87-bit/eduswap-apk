@@ -39,15 +39,7 @@ jobs:
         run: flutter create --platforms=android --org com.eduswap --project-name eduswap .
 
       - name: Provide placeholder Firebase config
-        run: |
-          mkdir -p android/app
-          cat > android/app/google-services.json <<'JSON'
-          {
-            "project_info": { "project_number": "123456789012", "project_id": "eduswap-demo", "storage_bucket": "eduswap-demo.appspot.com" },
-            "client": [ { "client_info": { "mobilesdk_app_id": "1:123456789012:android:0f1e2d3c4b5a69788796a5", "android_client_info": { "package_name": "com.eduswap.eduswap" } }, "oauth_client": [], "api_key": [ { "current_key": "AIzaSyDUMMYKEYDUMMYKEYDUMMYKEYDUMMYKEY00" } ], "services": { "appinvite_service": { "other_platform_oauth_client": [] } } } ],
-            "configuration_version": "1"
-          }
-          JSON
+        run: mkdir -p android/app && cp ci/google-services.json android/app/google-services.json
 
       - name: Apply Android build configuration
         run: ./scripts/configure_android.sh
@@ -55,7 +47,7 @@ jobs:
       - name: Install packages
         run: flutter pub get
 
-      - name: Patch plugins (jcenter -> mavenCentral)
+      - name: Patch plugins (jcenter to mavenCentral)
         run: ./scripts/patch_plugins.sh
 
       - name: Generate code (Freezed / json_serializable)
